@@ -2,7 +2,7 @@ import React from 'react'
 import ProductCard from './ProductCard';
 import { categories } from './ProductCategories';
 
-interface Product {
+interface FetchedProduct {
   id: string;
   name: string;
   market_prices:{
@@ -18,10 +18,10 @@ const ProductCardGrid = async () => {
 
   // Fetch products from the backend
   const res = await fetch('https://www.kencko.com/api/v1/products/US?shop_domain=vip-kencko.myshopify.com')
-  const products: Product[] = await res.json();
+  const products: FetchedProduct[] = await res.json();
   
   // Pre-process the products into a category-based map
-  const productsByCategory = products.reduce<{ [key: string]: Product[] }>((acc, product) => {
+  const productsByCategory = products.reduce<{ [key: string]: FetchedProduct[] }>((acc, product) => {
     const category = product.category;
   
     if (!acc[category]) {

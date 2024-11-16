@@ -1,5 +1,4 @@
 'use client';
-
 import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
 
 // Define the Product interface with id, name, quantity, and price

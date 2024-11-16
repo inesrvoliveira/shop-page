@@ -9,13 +9,13 @@ interface AddToBasketProps {
 }
 
 const AddToBasket = ({ productId, productName, productPrice } : AddToBasketProps) => {
-  const { addToBasket, basket } = useBasket();  // Access the addToBasket function from context
+  const { addToBasket } = useBasket();  // Access the addToBasket function from context
 
   return (
     <div>
       <button
         className="btn btn-active"
-        onClick={() => {addToBasket(productId, productName, productPrice); console.log(basket)}}  // Call addToBasket with the productId
+        onClick={() => {addToBasket(productId, productName, productPrice)}} 
       >
         Add to Basket
       </button>

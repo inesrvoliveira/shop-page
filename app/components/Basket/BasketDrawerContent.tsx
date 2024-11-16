@@ -1,4 +1,3 @@
-'use client';
 import React from 'react';
 import { useBasket } from './BasketContext';
 
@@ -28,6 +27,8 @@ const BasketDrawerContent = () => {
       ) : (
         <p>Your basket is empty.</p>
       )}
+
+      {/* Suggestions from other categories should go here */}
 
       {/* Total price and Checkout button at the bottom */}
       <div className="mt-auto pt-4 border-t border-gray-300">

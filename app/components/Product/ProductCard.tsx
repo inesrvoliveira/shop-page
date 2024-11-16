@@ -1,14 +1,8 @@
 import React from 'react'
 import AddToBasket from '../Basket/AddToBasket';
+import { Product } from './ProductTypes';
 
-interface ProductCard {
-  id: string;
-  name: string;
-  productPackagingUrl: string;
-  price: number;
-}
-
-const ProductCard = ({ id, name, productPackagingUrl, price } : ProductCard) => {
+const ProductCard = ({ id, name, productPackagingUrl, price } : Product) => {
     return (
       <div className="card bg-base-100 w-72 h-96 shadow-xl border p-4 rounded-lg flex flex-col">
         <figure className="h-2/3 w-full overflow-hidden">
@@ -24,9 +18,9 @@ const ProductCard = ({ id, name, productPackagingUrl, price } : ProductCard) => 
             <h2 className="text-lg font-semibold">${price}</h2>
             <div className="card-actions">
               <AddToBasket 
-              productId={id}
-              productName={name}
-              productPrice={price}
+              id={id}
+              name={name}
+              price={price}
               />
             </div>
           </div>

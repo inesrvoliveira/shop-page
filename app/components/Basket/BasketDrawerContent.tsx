@@ -1,12 +1,9 @@
 import React from 'react';
-import { useBasket } from './BasketContext';
+import { useBasket, useBasketTotals} from './BasketContext';
 
 const BasketDrawerContent = () => {
   const { basket } = useBasket();
-
-  // Calculate the total price of all products in the basket
-  const totalPrice = basket.reduce(
-    (total, product) => total + product.price * product.quantity,0);
+  const { totalPrice } = useBasketTotals();
 
   return (
     <div className="bg-base-200 text-base-content min-h-full w-80 p-4 flex flex-col">
@@ -15,11 +12,11 @@ const BasketDrawerContent = () => {
       {/* List of products */}
       {basket.length > 0 ? (
         <ul className="space-y-4 flex-grow">
-          {basket.map((product) => (
-            <li key={product.id} className="flex justify-between items-center">
-              <span>{product.name}</span>
+          {basket.map((item) => (
+            <li key={item.product.id} className="flex justify-between items-center">
+              <span>{item.product.name}</span>
               <div className="flex items-center space-x-2">
-                <span>Quantity: {product.quantity}</span>
+                <span>Quantity: {item.quantity}</span>
               </div>
             </li>
           ))}

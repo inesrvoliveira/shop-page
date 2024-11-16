@@ -1,16 +1,9 @@
 'use client';
 import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
-
-// Define the Product interface with id, name, quantity, and price
-interface Product {
-  id: string;       // Product ID
-  name: string;     // Product Name
-  quantity: number; // Quantity in the basket
-  price: number;    // Price of the product
-}
+import { BasketItem, bottlePrice, freeBottle } from '../Product/ProductTypes';
 
 interface BasketContextType {
-  basket: Product[];     // Array of products, each with id, name, quantity, and price
+  basket: BasketItem[];     
   addToBasket: (productId: string, name: string, price: number) => void; 
 }
 
@@ -24,8 +17,26 @@ export const useBasket = () => {
   return context;
 };
 
+export const useBasketTotals = () => {
+  const { basket } = useBasket();
+
+  const totalItems = basket.reduce((total, item) => total + item.quantity, 0);
+
+  const totalPrice = basket.reduce((total, item) => {
+    if (item.product.id === freeBottle.product.id) {
+      if (item.quantity > 1) {
+        return total + bottlePrice * (item.quantity - 1); // Free bottle logic
+      }
+      return total;
+    }
+    return total + item.product.price * item.quantity;
+  }, 0);
+
+  return { totalItems, totalPrice };
+};
+
 export const BasketProvider = ({ children }: { children: ReactNode }) => {
-  const [basket, setBasket] = useState<Product[]>([]); // Initialize as an array
+  const [basket, setBasket] = useState<BasketItem[]>([]); // Initialize as an array
 
   // Load basket from localStorage when the app is mounted
   useEffect(() => {
@@ -42,45 +53,43 @@ export const BasketProvider = ({ children }: { children: ReactNode }) => {
     }
   }, [basket]);
 
-const addToBasket = (productId: string, name: string, price: number) => {
-  setBasket((prevBasket) => {
-    // Check if the basket is empty and if the product is being added for the first time
-    const isBasketEmpty = prevBasket.length === 0;
-
-    // Add the free bottle only when the basket is empty
-    if (isBasketEmpty) {
-      const freeBottle: Product = {
-        id: 'freebottleid',
-        name: 'universal shaker bottle FREE',
-        quantity: 1,
-        price: 0, // Free product
-      };
-
-      // Add both the free bottle and the product to the basket
-      return [
-        { id: productId, name, quantity: 1, price },
-        freeBottle,
-        ...prevBasket, // Preserve existing items if any
-      ];
-    }
-
-    // Find the existing product in the basket
-    const existingProduct = prevBasket.find((product) => product.id === productId);
-
-    // If the product exists, increase the quantity. Otherwise, add the new product.
-    if (existingProduct) {
-      return prevBasket.map((product) =>
-        product.id === productId
-          ? { ...product, quantity: product.quantity + 1 }
-          : product
+  const addToBasket = (productId: string, name: string, price: number) => {
+    setBasket((prevBasket) => {
+      const isBasketEmpty = prevBasket.length === 0;
+  
+      // Add the free bottle only when the basket is empty
+      if (isBasketEmpty) {
+        // Add both the free bottle and the product to the basket
+        return [
+          { product: { id: productId, name, price }, quantity: 1 }, // Add product
+          freeBottle, // Add free bottle
+          ...prevBasket, // Preserve existing items if any
+        ];
+      }
+  
+      // Find the existing product in the basket
+      const existingProduct = prevBasket.find(
+        (item) => item.product.id === productId
       );
-    }
-    // If the product does not exist, add it to the basket
-    return [...prevBasket, { id: productId, name, quantity: 1, price }];
-  });
-};
-
-
+  
+      // If the product is already in the basket, update the quantity
+      if (existingProduct) {
+        //just increase the quantity
+        return prevBasket.map((item) =>
+          item.product.id === productId
+            ? { ...item, quantity: item.quantity + 1 }
+            : item
+        );
+      }
+  
+      // If the product does not exist in the basket, add it to the basket
+      return [
+        ...prevBasket,
+        { product: { id: productId, name, price }, quantity: 1 },
+      ];
+    });
+  
+  };
 
   return (
     <BasketContext.Provider value={{ basket, addToBasket }}>

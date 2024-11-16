@@ -1,13 +1,12 @@
 'use client';
-import React, { useRef, useState} from 'react';
-import { useBasket } from './BasketContext';  // Import the useBasket hook
+import React, { useRef, useState, useEffect } from 'react';
+import { useBasketTotals } from './BasketContext';  // Import the useBasket hook
 import BasketDrawerContent from './BasketDrawerContent';
 
 const BasketDrawer = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const drawerCheckboxRef = useRef<HTMLInputElement | null>(null);
-
-  const { basket } = useBasket();  // Get basket state and actions from context
+  const { totalItems } = useBasketTotals();
 
   const toggleDrawer = () => {
     if (drawerCheckboxRef.current) {
@@ -15,8 +14,6 @@ const BasketDrawer = () => {
       setIsDrawerOpen(!isDrawerOpen);
     }
   };
-
-  const totalItems = basket.reduce((total, product) => total + product.quantity, 0);
 
   return (
     <div>

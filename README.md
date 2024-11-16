@@ -4,9 +4,11 @@
 
 - Client-Side Logic: Features like adding items to the basket or navigating to specific categories (handled in the navbar) are implemented in client-side components. React Context is used for state sharing, and localStorage ensures the basket remains persistent across page reloads.
 
+- Free Bottle: For simplicity, I predefined the bottle product in the code so it is automatically added to the basket. When calculating the total price, I check the number of bottles in the basket and subtract the cost of one if the total number of bottles is greater than one. I assumed this feature is exclusive to first-time purchases, but I did not implement additional logic for this to keep the code simpler.
+
 - Styling: Tailwind CSS and DaisyUI made the UI quick to build and easy to manage. 
 
-
+---
 
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 

@@ -3,7 +3,7 @@ import ProductCard from './ProductCard';
 import { categories } from './ProductCategories';
 
 interface Product {
-  id: number;
+  id: string;
   name: string;
   market_prices:{
     subscription_price: number;
@@ -52,6 +52,7 @@ const ProductCardGrid = async () => {
                 {filteredProducts.map((product) => (
                   <li key={product.id}>
                     <ProductCard 
+                      id={product.id}
                       productPackagingUrl={product.productPackaging.url} 
                       name={product.name} 
                       price={product.market_prices.subscription_price}
